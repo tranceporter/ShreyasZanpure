@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<style>
+    html {
+        height: 100%;
+    }
+
+    body {
+        background: linear-gradient(rgba(0,0,0, 0.0), rgba(0,0,0, -0.0)), url('../../Content/Images/Soham1.jpg');
+        margin: 0;
+        background-size: 110%;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
+}
+</style>
+
+<div class="row" style="margin-top:40px;">
+    <div class="pull-left" style="margin-left: 10%; color: black">
+        <h1 class="glow tlt">
+            <ul class="texts">
+                <li>Soham turns ONE!</li>
+
+            </ul>
+        </h1>
+        <h4 class="tlt1">
+            <ul class="texts">
+                <li>And to celebrate we have decided to throw a party :)</li>
+                <li>Click on the Location link to find out where it's happening</li>
+                <li>And then click the RSVP link to tell us if you will be joining in on the fun! :)</li>
+            </ul>
+        </h4>
+    </div>
+
+    <div class="pull-right" style="margin-right:10%; margin-left:10px;">
+        <a class="btn btn-success" data-toggle="modal" data-target=".rsvpModal">RSVP</a>
+    </div>
+    <div class="pull-right">
+        <a class="btn btn-success" data-toggle="modal" data-target=".locationModal">LOCATION</a>
+    </div>
+
+    <div>
+        @Html.Partial("LocationModal")
+    </div>
+
+    <div>
+        @Html.Partial("RsvpModal")
+    </div>
+</div>
+
+<script>
+    function initialize() {
+        var mapOptions = {
+            center: new google.maps.LatLng(51.529871, -1.668451),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        };
+
+        var map = new google.maps.Map(document.getElementById("mapCanvas"),
+          mapOptions);
+
+        var request = {
+            placeId: 'ChIJlXCS7kxOcUgRSPDVxU-ZVbo'
+        };
+
+        var infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+
+        service.getDetails(request, function (place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location
+                });
+                google.maps.event.addListener(marker, 'click', function () {
+                    var displayContent = place.name + '<br/>' + place.formatted_address + '<br/> <a href="' + place.website + '">' + place.website + '</a>' 
+                    infowindow.setContent(displayContent);
+                    infowindow.open(map, this);
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('.tlt1').hide();
+        $('.tlt2').hide();
+        $('.tlt').textillate();
+        
+        setTimeout(function () {
+            $('.tlt1').show();
+            $('.tlt1').textillate();
+        }, 3000);
+
+        $('.locationModal').on('shown.bs.modal', function () {
+            $('.tlt2').show();
+            $('.tlt2').textillate();
+
+            initialize();
+          
+            //google.maps.event.trigger(map, "resize");
+        });
+
+        $.fn.bootstrapSwitch.defaults.size = 'small';
+        $("[name='attendance']").bootstrapSwitch();
+        $("[name='mealPreference']").bootstrapSwitch();
+
+        $('#attendance').on('switchChange.bootstrapSwitch', function () {
+            $('#mealDiv').toggle($(this).bootstrapSwitch('state'))
+        });
+
+        $('#familyNameRequired').hide();
+
+        $('#familyName').on('input propertychange', function () {
+            $('#familyNameRequired').toggle($(this).val().trim().length <= 0);
+        });
+
+        $("#sendRsvp").click(function () {
+            if ($('#familyName').val().trim() != '') {
+                $('#familyNameRequired').hide();
+                var data = {
+                    FamilyName: $('#familyName').val(),
+                    Attending: $('#attendance').bootstrapSwitch('state'),
+                    Vegetarian: $('#mealPreference').bootstrapSwitch('state'),
+                }
+
+                $('.rsvpModal').modal('hide');
+                $('html').spin();
+
+                toastr.options = {
+                    "positionClass": "toast-bottom-full-width",
+                };
+
+                $.post('/Home/SendRsvp', data)
+                    .done(function (data) {
+                        if (data && data.messageSent) {
+                            toastr.success('Thank you for your RSVP!');
+                        }
+                        $('html').spin(false);
+                    }).error(function (jqXHR, textStatus, errorThrown) {
+                        toastr.error('Apologies! Looks like we failed to send your RSVP. Please re-try on contact Shreyas on 07818565674.')
+                        $('html').spin(false);
+                    });
+            }
+            else {
+                $('#familyNameRequired').show();
+            }
+        });
+
+        //var $loading = $('#cover').hide();
+        //$(document)
+        //  .ajaxStart(function () {
+        //      $loading.show();
+        //  })
+        //  .ajaxStop(function () {
+        //      $loading.hide();
+        //  });
+    });
+</script>
