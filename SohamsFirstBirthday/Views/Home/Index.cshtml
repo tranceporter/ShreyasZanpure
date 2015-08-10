@@ -4,13 +4,13 @@
 
 <style>
     .bigback {
-        background: url('../../Content/Images/Soham1.jpg');
+        background: url('../../Content/Images/Collage.jpeg');
         min-height: 200px;
-        height: 500px;
-        max-width: 90%;
+        height: 600px;
+        max-width: 100%;
         display: block;
-        background-size: cover;
-        background-repeat: no-repeat;
+        background-size: contain;
+        background-repeat: round;
     }
 
 </style>
@@ -145,24 +145,10 @@
             $('#location').show();
             $('.tlt2').textillate();
             initialize();
-
-            event.preventDefault();
-            var target = this.getAttribute('href');
-            $('html, body').animate({
-                scrollTop: $(target).offset().top
-            }, 2000);
-
-            //google.maps.event.trigger(map, "resize");
         });
 
         $('#rsvpLink').click(function () {
             $('#rsvp').show();
-
-            event.preventDefault();
-            var target = this.getAttribute('href');
-            $('html, body').animate({
-                scrollTop: $(target).offset().top
-            }, 2000);
         });
 
         $.fn.bootstrapSwitch.defaults.size = 'small';
