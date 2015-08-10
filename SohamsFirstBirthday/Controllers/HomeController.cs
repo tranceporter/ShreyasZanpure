@@ -25,7 +25,6 @@ namespace SohamsFirstBirthday.Controllers
             body.AppendLine(string.Format("Vegetarian: {0}", model.Vegetarian ? "Yes" : "No"));
 
             var msg = new MailMessage();
-
             msg.From = new MailAddress("shreyas.zanpure@gmail.com", "Shreyas Zanpure");
             msg.To.Add(new MailAddress("preeti.p.kulkarni@gmail.com", "Preeti Kulkarni"));
             msg.Priority = MailPriority.High;
@@ -34,7 +33,6 @@ namespace SohamsFirstBirthday.Controllers
             msg.IsBodyHtml = false;
 
             var client = new SmtpClient();
-
             client.Host = "smtp.gmail.com";
             client.Port = 587;
             client.EnableSsl = true;
