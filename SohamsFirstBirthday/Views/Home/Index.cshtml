@@ -10,7 +10,7 @@
         max-width: 100%;
         display: block;
         background-size: contain;
-        background-repeat: repeat;
+        background-repeat: repeat-x;
     }
 
 </style>
@@ -65,24 +65,24 @@
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <form class="form-horizontal" id="rsvpForm" name="rsvpForm" action="/Home/SendRsvp" method="post">
                         <div class="form-group">
-                            <span for="familyName" class="col-md-3 control-label">Family Name</span>
-                            <div class="col-md-5">
+                            <span for="familyName" class="col-xs-12 col-sm-6 col-md-3 control-label">Family Name</span>
+                            <div class="col-xs-12 col-sm-9 col-md-5">
                                 <input type="text" class="form-control" id="familyName" name="familyName" placeholder="Family Name">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-xs-12 col-sm-9 col-md-4">
                                 <span id="familyNameRequired" class="alert alert-danger">Please enter family name</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <span for="attendance" class="col-md-3 control-label">Attending</span>
-                            <div class="col-md-3">
-                                <input class="col-md-3" type="checkbox" data-on-color="info" data-off-color="danger" data-on-text="Yes" data-off-text="No" data-animate="true" id="attendance" name="attendance" checked>
+                            <span for="attendance" class="col-xs-12 col-sm-6 col-md-3 control-label">Attending</span>
+                            <div class="col-xs-12 col-sm-9 col-md-3">
+                                <input type="checkbox" data-on-color="info" data-off-color="danger" data-on-text="Yes" data-off-text="No" data-animate="true" id="attendance" name="attendance" checked>
                             </div>
                         </div>
                         <div class="form-group" id="mealDiv">
-                            <span for="mealPreference" class="col-md-3 control-label">Vegetarian</span>
-                            <div class="col-md-3">
-                                <input class="col-md-3" type="checkbox" data-on-color="info" data-off-color="danger" data-on-text="Yes" data-off-text="No" data-animate="true" id="mealPreference" name="mealPreference" checked>
+                            <span for="mealPreference" class="col-xs-12 col-sm-6 col-md-3 control-label">Vegetarian</span>
+                            <div class="col-xs-12 col-sm-9 col-md-3">
+                                <input type="checkbox" data-on-color="info" data-off-color="danger" data-on-text="Yes" data-off-text="No" data-animate="true" id="mealPreference" name="mealPreference" checked>
                             </div>
                         </div>
                     </form>
