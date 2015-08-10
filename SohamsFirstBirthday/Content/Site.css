@@ -1,6 +1,6 @@
 ﻿body {
     font-size: .85em;
-    font-family: 'Cabin Condensed', sans-serif !important;
+    font-family: 'Courgette', cursive !important;
     color: #232323;
     background-color: #fff;
 }
@@ -60,7 +60,7 @@ textarea {
     display: none;
 }
 
-@media (max-width: 767px) {
+/*@media (max-width: 767px) {
   #content .modal.fade.in {
     top: 5%;
   }
@@ -70,4 +70,4 @@ textarea {
   .touch .modal .modal-body {
     max-height: none; 
   }
-}
+}*/
