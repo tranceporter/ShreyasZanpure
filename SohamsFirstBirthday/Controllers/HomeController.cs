@@ -1,4 +1,5 @@
-﻿using SohamsFirstBirthday.Models;
+﻿using RestSharp;
+using SohamsFirstBirthday.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +25,28 @@ namespace SohamsFirstBirthday.Controllers
             body.AppendLine(string.Format("Attending: {0}", model.Attending ? "Yes" : "No"));
             body.AppendLine(string.Format("Vegetarian: {0}", model.Vegetarian ? "Yes" : "No"));
 
-            var msg = new MailMessage();
-            msg.From = new MailAddress("shreyas.zanpure@gmail.com", "Shreyas Zanpure");
-            msg.To.Add(new MailAddress("preeti.p.kulkarni@gmail.com", "Preeti Kulkarni"));
-            msg.Priority = MailPriority.High;
-            msg.Subject = string.Format("Soham's Birthday RSVP for {0}", model.FamilyName);
-            msg.Body = body.ToString();
-            msg.IsBodyHtml = false;
+            var client = new RestClient();
+            client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+            client.Authenticator = new HttpBasicAuthenticator("api", "key-0ff892513b00ca2f0344f2174f1c601d");
 
-            var client = new SmtpClient();
-            client.Host = "smtp.gmail.com";
-            client.Port = 587;
-            client.EnableSsl = true;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new System.Net.NetworkCredential("shreyas.zanpure@gmail.com", "Shrpun123");
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "app15b4e0688ac44b97816dd29bf0c25411.mailgun.org", ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", "shreyas.zanpure@gmail.com");
+            request.AddParameter("to", "preeti.p.kulkarni@gmail.com");
+            request.AddParameter("cc", "shreyas.zanpure@gmail.com");
+            request.AddParameter("subject", string.Format("Soham's Birthday RSVP for {0}", model.FamilyName));
+            request.AddParameter("text", body.ToString());
+            request.Method = Method.POST;
 
-            client.Send(msg);
+            var result = client.Execute(request);
 
-            return Json(new { messageSent = true });
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Json(new { messageSent = true });
+            }
+
+            return Json(new { messageSent = false });
         }
     }
 }
